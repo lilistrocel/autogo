@@ -1,14 +1,23 @@
 import axios from 'axios';
 import { Shop, Product } from '../types';
 
-const API_URL = 'http://localhost:8000/api/v1';
-
+// Create axios instance with environment-aware configuration
 const api = axios.create({
-  baseURL: API_URL,
+  baseURL: '/api/v1',
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: false
 });
+
+// Add error handling interceptor
+api.interceptors.response.use(
+  response => response,
+  error => {
+    console.error('API Error:', error);
+    return Promise.reject(error);
+  }
+);
 
 // Shop API
 export const getShops = () => api.get<Shop[]>('/shops/').then(res => res.data);

@@ -1,0 +1,1 @@
+"[Unit]\nDescription=AutoGo Backend\nAfter=network.target\n\n[Service]\nUser=ec2-user\nWorkingDirectory=/var/www/autogo/backend\nEnvironment=\"PATH=/var/www/autogo/backend/venv/bin\"\nExecStart=/var/www/autogo/backend/venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8000\n\n[Install]\nWantedBy=multi-user.target" 

@@ -1,26 +1,37 @@
 #!/bin/bash
 
+# Enable debug output
+set -x
+
 # Update system packages
+echo "Updating system packages..."
 sudo dnf update -y
 sudo dnf install -y nodejs python3-pip nginx git
 
 # Install PM2 globally
+echo "Installing PM2..."
 sudo npm install -g pm2
 
 # Create application directory
+echo "Creating application directory..."
 sudo mkdir -p /var/www/autogo
 sudo chown ec2-user:ec2-user /var/www/autogo
 
-# Copy local files
+# Clone the repository
+echo "Cloning repository..."
 cd /var/www/autogo
+rm -rf * .*
+git clone https://github.com/lilistrocel/autogo.git .
 
 # Backend setup
+echo "Setting up backend..."
 cd backend
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 
 # Create systemd service for backend
+echo "Creating systemd service..."
 sudo tee /etc/systemd/system/autogo-backend.service << EOF
 [Unit]
 Description=AutoGo Backend
@@ -37,11 +48,13 @@ WantedBy=multi-user.target
 EOF
 
 # Frontend setup
+echo "Setting up frontend..."
 cd ../frontend
 npm install
 npm run build
 
 # Configure Nginx
+echo "Configuring Nginx..."
 sudo tee /etc/nginx/conf.d/autogo.conf << EOF
 server {
     listen 80;
@@ -76,6 +89,7 @@ server {
 EOF
 
 # Start services
+echo "Starting services..."
 sudo systemctl daemon-reload
 sudo systemctl enable autogo-backend
 sudo systemctl start autogo-backend
@@ -83,6 +97,7 @@ sudo systemctl enable nginx
 sudo systemctl start nginx
 
 # Set proper permissions for uploads directory
+echo "Setting permissions..."
 sudo mkdir -p /var/www/autogo/backend/uploads
 sudo chown -R ec2-user:ec2-user /var/www/autogo/backend/uploads
 chmod 755 /var/www/autogo/backend/uploads
