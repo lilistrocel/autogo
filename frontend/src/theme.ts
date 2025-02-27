@@ -1,5 +1,6 @@
 import { createTheme } from '@mui/material/styles';
 
+// Import fonts in your index.css or create a separate fonts.css file
 const theme = createTheme({
   palette: {
     primary: {
@@ -16,30 +17,45 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily: 'Uniwars, Arial, sans-serif',
     h1: {
       fontSize: '2.5rem',
       fontWeight: 600,
+      fontFamily: 'Uniwars, Arial, sans-serif',
     },
     h2: {
       fontSize: '2rem',
       fontWeight: 500,
+      fontFamily: 'Uniwars, Arial, sans-serif',
     },
     h3: {
       fontSize: '1.75rem',
       fontWeight: 500,
+      fontFamily: 'Uniwars, Arial, sans-serif',
     },
     h4: {
       fontSize: '1.5rem',
       fontWeight: 500,
+      fontFamily: 'Uniwars, Arial, sans-serif',
     },
     h5: {
       fontSize: '1.25rem',
       fontWeight: 500,
+      fontFamily: 'Uniwars, Arial, sans-serif',
     },
     h6: {
       fontSize: '1rem',
       fontWeight: 500,
+      fontFamily: 'Uniwars, Arial, sans-serif',
+    },
+    body1: {
+      fontFamily: 'JetBrains Mono, monospace',
+    },
+    body2: {
+      fontFamily: 'JetBrains Mono, monospace',
+    },
+    button: {
+      fontFamily: 'Uniwars, Arial, sans-serif',
     },
   },
   components: {

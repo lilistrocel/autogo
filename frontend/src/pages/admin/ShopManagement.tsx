@@ -22,6 +22,7 @@ import AddIcon from '@mui/icons-material/Add';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
 import { Shop } from '../../types';
+import * as api from '../../services/api';
 
 const Input = styled('input')({
   display: 'none',
@@ -53,15 +54,24 @@ const EditDialog: React.FC<EditDialogProps> = ({ open, shop, onClose, onSave }) 
     }));
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       setImagePreview(URL.createObjectURL(file));
-      // In a real app, you would upload the file to a server and get back a URL
-      setFormData(prev => ({
-        ...prev,
-        logoUrl: URL.createObjectURL(file),
-      }));
+      
+      try {
+        // Upload the file and get the URL
+        const uploadedUrl = await api.uploadFile(file);
+        
+        // Update the form data with the URL from the server
+        setFormData(prev => ({
+          ...prev,
+          logoUrl: uploadedUrl,
+        }));
+      } catch (error) {
+        console.error('Error uploading file:', error);
+        // You might want to show an error message to the user here
+      }
     }
   };
 

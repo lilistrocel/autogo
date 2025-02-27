@@ -37,4 +37,18 @@ export const updateProduct = (productId: number, product: Partial<Product>) =>
   api.put<Product>(`/products/${productId}/`, product).then(res => res.data);
 
 export const deleteProduct = (productId: number) =>
-  api.delete(`/products/${productId}/`).then(res => res.data); 
+  api.delete(`/products/${productId}/`).then(res => res.data);
+
+// File upload
+export const uploadFile = async (file: File) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  
+  const response = await api.post('/upload/', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  
+  return response.data.url;
+}; 

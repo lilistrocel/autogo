@@ -74,7 +74,7 @@ const ProductManagement: React.FC<ProductManagementProps> = ({ shops }) => {
     setSelectedShop(event.target.value as number);
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       setProductData(prev => ({
@@ -93,12 +93,18 @@ const ProductManagement: React.FC<ProductManagementProps> = ({ shops }) => {
     }
 
     try {
+      let imageUrl = '';
+      if (productData.image) {
+        // Upload the image first
+        imageUrl = await api.uploadFile(productData.image);
+      }
+
       const productPayload = {
         name: productData.name,
         description: productData.description,
         price: parseFloat(productData.price),
-        shop_id: selectedShop,
-        imageUrl: productData.imagePreview, // In a real app, you would upload the image first
+        shopId: selectedShop,
+        imageUrl: imageUrl,
       };
 
       await api.createProduct(productPayload);

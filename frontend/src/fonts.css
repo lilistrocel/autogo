@@ -1,0 +1,10 @@
+/* Import JetBrains Mono from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+/* Import Uniwars font - you'll need to have this font file in your assets */
+@font-face {
+  font-family: 'Uniwars';
+  src: url('./assets/fonts/Uniwars.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+} 

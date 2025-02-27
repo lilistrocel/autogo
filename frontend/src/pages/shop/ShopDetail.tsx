@@ -56,13 +56,29 @@ const ShopDetail: React.FC<ShopDetailProps> = ({ shops }) => {
 
   return (
     <Container>
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom color="primary">
-          {shop.name}
-        </Typography>
-        <Typography variant="subtitle1" color="text.secondary" gutterBottom>
-          {shop.description}
-        </Typography>
+      <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+        {shop.logoUrl && (
+          <Box
+            component="img"
+            src={shop.logoUrl}
+            alt={`${shop.name} logo`}
+            sx={{
+              width: 120,
+              height: 120,
+              objectFit: 'contain',
+              borderRadius: '8px',
+              boxShadow: 1
+            }}
+          />
+        )}
+        <Box>
+          <Typography variant="h4" component="h1" gutterBottom color="primary">
+            {shop.name}
+          </Typography>
+          <Typography variant="subtitle1" color="text.secondary" gutterBottom>
+            {shop.description}
+          </Typography>
+        </Box>
       </Box>
 
       {loading ? (
@@ -88,15 +104,21 @@ const ShopDetail: React.FC<ShopDetailProps> = ({ shops }) => {
                   },
                 }}
               >
-                {product.imageUrl && (
+                <Box sx={{ position: 'relative', pt: '75%' /* 4:3 aspect ratio */ }}>
                   <CardMedia
                     component="img"
-                    height="200"
-                    image={product.imageUrl}
+                    image={product.imageUrl || '/placeholder-images.webp'}
                     alt={product.name}
-                    sx={{ objectFit: 'cover' }}
+                    sx={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover'
+                    }}
                   />
-                )}
+                </Box>
                 <CardContent sx={{ flexGrow: 1 }}>
                   <Typography gutterBottom variant="h6" component="h2">
                     {product.name}
@@ -105,7 +127,7 @@ const ShopDetail: React.FC<ShopDetailProps> = ({ shops }) => {
                     {product.description}
                   </Typography>
                   <Typography variant="h6" color="primary">
-                    ${product.price.toFixed(2)}
+                    AED {product.price.toFixed(2)}
                   </Typography>
                 </CardContent>
                 <Box sx={{ p: 2 }}>
