@@ -1,16 +1,17 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.core.config import settings
 
 app = FastAPI(
-    title="AuroApp API",
-    description="E-commerce platform API",
-    version="0.1.0"
+    title=settings.PROJECT_NAME,
+    version=settings.VERSION,
+    openapi_url=f"{settings.API_V1_STR}/openapi.json"
 )
 
-# Configure CORS
+# Set up CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # React frontend URL
+    allow_origins=["http://localhost:3000"],  # React default port
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -18,4 +19,8 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
-    return {"message": "Welcome to AuroApp API"} 
+    return {"message": "Welcome to AuroApp API"}
+
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy"} 
