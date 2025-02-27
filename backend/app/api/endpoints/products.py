@@ -16,7 +16,7 @@ def get_products(
 ):
     query = db.query(Product)
     if shop_id:
-        query = query.filter(Product.shop_id == shop_id)
+        query = query.filter(Product.shopId == shop_id)
     return query.offset(skip).limit(limit).all()
 
 @router.post("/", response_model=ProductSchema)

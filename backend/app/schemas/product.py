@@ -6,8 +6,8 @@ class ProductBase(BaseModel):
     name: str
     description: Optional[str] = None
     price: float
-    image_url: Optional[str] = None
-    shop_id: int
+    imageUrl: Optional[str] = None
+    shopId: int
 
 class ProductCreate(ProductBase):
     pass
@@ -17,8 +17,12 @@ class ProductUpdate(ProductBase):
 
 class Product(ProductBase):
     id: int
-    created_at: datetime
-    updated_at: Optional[datetime] = None
+    createdAt: datetime
+    updatedAt: Optional[datetime] = None
 
     class Config:
-        from_attributes = True 
+        from_attributes = True
+        alias_generator = lambda string: ''.join(
+            word.capitalize() if i > 0 else word
+            for i, word in enumerate(string.split('_'))
+        ) 

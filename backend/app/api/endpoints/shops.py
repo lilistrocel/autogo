@@ -14,7 +14,7 @@ def get_shops(db: Session = Depends(get_db), skip: int = 0, limit: int = 100):
 @router.post("/", response_model=ShopSchema)
 def create_shop(shop: ShopCreate, db: Session = Depends(get_db)):
     db_shop = Shop(**shop.model_dump())
-    db_shop.owner_id = 1  # TODO: Get from current user
+    db_shop.ownerId = 1  # TODO: Get from current user
     db.add(db_shop)
     db.commit()
     db.refresh(db_shop)
