@@ -12,21 +12,11 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { Shop } from '../../types';
 
-// Temporary mock data
-const mockShops: Shop[] = [
-  {
-    id: '1',
-    name: 'Auto Parts Plus',
-    description: 'Quality auto parts for all makes and models',
-    logoUrl: '/placeholder.jpg',
-    ownerId: '1',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  // Add more mock shops as needed
-];
+interface ShopListProps {
+  shops: Shop[];
+}
 
-const ShopList: React.FC = () => {
+const ShopList: React.FC<ShopListProps> = ({ shops }) => {
   const navigate = useNavigate();
 
   return (
@@ -41,7 +31,7 @@ const ShopList: React.FC = () => {
       </Box>
       
       <Grid container spacing={4}>
-        {mockShops.map((shop) => (
+        {shops.map((shop) => (
           <Grid item xs={12} sm={6} md={4} key={shop.id}>
             <Card
               sx={{

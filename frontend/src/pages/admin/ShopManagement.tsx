@@ -27,27 +27,12 @@ const Input = styled('input')({
   display: 'none',
 });
 
-// Mock data - replace with API call later
-const initialShops: Shop[] = [
-  {
-    id: '1',
-    name: 'Auto Parts Plus',
-    description: 'Quality auto parts for all makes and models',
-    logoUrl: '/placeholder.jpg',
-    ownerId: '1',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: '2',
-    name: 'Premium Auto Supply',
-    description: 'Luxury and performance auto parts',
-    logoUrl: '/placeholder.jpg',
-    ownerId: '1',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-];
+interface ShopManagementProps {
+  shops: Shop[];
+  onCreateShop: (shop: Partial<Shop>) => void;
+  onUpdateShop: (shopId: number, shop: Partial<Shop>) => void;
+  onDeleteShop: (shopId: number) => void;
+}
 
 interface EditDialogProps {
   open: boolean;
@@ -150,8 +135,12 @@ const EditDialog: React.FC<EditDialogProps> = ({ open, shop, onClose, onSave }) 
   );
 };
 
-const ShopManagement: React.FC = () => {
-  const [shops, setShops] = useState<Shop[]>(initialShops);
+const ShopManagement: React.FC<ShopManagementProps> = ({
+  shops,
+  onCreateShop,
+  onUpdateShop,
+  onDeleteShop,
+}) => {
   const [selectedShop, setSelectedShop] = useState<Shop | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -165,32 +154,13 @@ const ShopManagement: React.FC = () => {
     setIsDialogOpen(true);
   };
 
-  const handleDelete = (shopId: string) => {
-    // In a real app, you would call an API to delete the shop
-    setShops(shops.filter(shop => shop.id !== shopId));
-  };
-
   const handleSave = (shopData: Partial<Shop>) => {
     if (selectedShop) {
-      // Edit existing shop
-      setShops(shops.map(shop =>
-        shop.id === selectedShop.id
-          ? { ...shop, ...shopData, updatedAt: new Date().toISOString() }
-          : shop
-      ));
+      onUpdateShop(selectedShop.id, shopData);
     } else {
-      // Create new shop
-      const newShop: Shop = {
-        id: Date.now().toString(), // In a real app, this would come from the backend
-        name: shopData.name || '',
-        description: shopData.description || '',
-        logoUrl: shopData.logoUrl || '/placeholder.jpg',
-        ownerId: '1', // In a real app, this would be the logged-in user's ID
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
-      setShops([...shops, newShop]);
+      onCreateShop(shopData);
     }
+    setIsDialogOpen(false);
   };
 
   return (
@@ -235,7 +205,7 @@ const ShopManagement: React.FC = () => {
                     </IconButton>
                     <IconButton
                       size="small"
-                      onClick={() => handleDelete(shop.id)}
+                      onClick={() => onDeleteShop(shop.id)}
                       color="error"
                     >
                       <DeleteIcon />

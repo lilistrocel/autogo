@@ -1,71 +1,97 @@
-# AuroApp - E-commerce Platform
+# AuroApp E-commerce Platform
 
-A scalable e-commerce platform built with React and FastAPI.
+A scalable e-commerce platform built with React and Python, designed to support multiple vendors, inventory management, and logistics.
 
 ## Project Structure
+```
+AuroApp/
+├── frontend/          # React frontend application
+└── backend/          # Python FastAPI backend
+```
 
-```
-.
-├── backend/                # Python FastAPI backend
-│   ├── app/               # Application code
-│   │   ├── api/          # API endpoints
-│   │   ├── models/       # Database models
-│   │   ├── schemas/      # Pydantic schemas
-│   │   └── utils/        # Utility functions
-│   └── tests/            # Backend tests
-└── frontend/             # React frontend
-    ├── public/           # Static files
-    └── src/              # Source code
-        ├── components/   # React components
-        ├── pages/        # Page components
-        └── styles/       # CSS styles
-```
+## Technology Stack
+
+### Frontend
+- React
+- TypeScript
+- Material-UI (for UI components)
+- React Router (for routing)
+- Axios (for API calls)
+
+### Backend
+- Python 3.8+
+- FastAPI (REST API framework)
+- SQLAlchemy (ORM)
+- PostgreSQL (Database)
+- Alembic (Database migrations)
+
+### Development Tools
+- Git (Version Control)
+- Docker (Containerization)
+- Poetry (Python dependency management)
+- npm (Node.js package management)
 
 ## Setup Instructions
 
 ### Backend Setup
-
-1. Create a virtual environment:
+1. Navigate to the backend directory:
    ```bash
    cd backend
+   ```
+2. Create a virtual environment:
+   ```bash
    python -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
-
-2. Install dependencies:
+3. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
-
-3. Run the development server:
+4. Set up environment variables:
+   ```bash
+   cp .env.example .env
+   ```
+5. Run migrations:
+   ```bash
+   alembic upgrade head
+   ```
+6. Start the backend server:
    ```bash
    uvicorn app.main:app --reload
    ```
 
-The API will be available at `http://localhost:8000`
-
 ### Frontend Setup
-
-1. Install dependencies:
+1. Navigate to the frontend directory:
    ```bash
    cd frontend
+   ```
+2. Install dependencies:
+   ```bash
    npm install
    ```
-
-2. Run the development server:
+3. Start the development server:
    ```bash
    npm start
    ```
 
-The application will be available at `http://localhost:3000`
-
-## Development
-
-- Backend API documentation is available at `http://localhost:8000/docs`
-- The project uses SQLite for development but is designed to be easily migrated to Amazon RDS
-- TypeScript is used for type safety in the frontend
-- FastAPI provides automatic OpenAPI documentation
-
 ## Deployment
+The application is designed to be deployed on AWS EC2 Linux 2023 instance.
+Detailed deployment instructions will be added as the project progresses.
 
-The application is designed to be deployed on AWS EC2 Linux 2023 instance. Deployment instructions will be added in future updates. 
+## Features (Planned)
+- [ ] User Authentication
+- [ ] Product Catalog
+- [ ] Shopping Cart
+- [ ] Order Management
+- [ ] Vendor Management
+- [ ] Inventory Management
+- [ ] Payment Processing
+- [ ] Logistics Integration
+
+## Contributing
+1. Create a new branch for your feature
+2. Make your changes
+3. Submit a pull request
+
+## License
+This project is private and confidential. 

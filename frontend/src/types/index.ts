@@ -1,30 +1,30 @@
 export interface Product {
-  id: string;
+  id: number;
   name: string;
   description: string;
   price: number;
   imageUrl: string;
-  shopId: string;
+  shopId: number;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface Shop {
-  id: string;
+  id: number;
   name: string;
   description: string;
   logoUrl: string;
-  ownerId: string;
+  ownerId: number;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface CartItem {
   id: string;
-  productId: string;
+  productId: number;
   product: Product;
   quantity: number;
-  shopId: string;
+  shopId: number;
 }
 
 export interface Cart {
