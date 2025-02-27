@@ -18,6 +18,7 @@ import '@fontsource/jetbrains-mono';
 import '@fontsource/jetbrains-mono/500.css';
 import '@fontsource/jetbrains-mono/600.css';
 import '@fontsource/jetbrains-mono/700.css';
+import { useCart } from '../../contexts/CartContext';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -84,6 +85,9 @@ const theme = createTheme({
 });
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
+  const { items } = useCart();
+  const cartItemsCount = items.reduce((total, item) => total + item.quantity, 0);
+
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
@@ -166,7 +170,17 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   padding: { xs: 1, sm: 1.2 }
                 }}
               >
-                <Badge badgeContent={0} color="secondary">
+                <Badge 
+                  badgeContent={cartItemsCount} 
+                  color="secondary"
+                  sx={{
+                    '& .MuiBadge-badge': {
+                      fontSize: '0.8rem',
+                      height: '20px',
+                      minWidth: '20px',
+                    }
+                  }}
+                >
                   <ShoppingCartIcon sx={{ fontSize: { xs: '1.3rem', sm: '1.4rem' } }} />
                 </Badge>
               </IconButton>

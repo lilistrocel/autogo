@@ -8,19 +8,15 @@ import ShopManagement from './pages/admin/ShopManagement';
 import ShopList from './pages/shop/ShopList';
 import ShopDetail from './pages/shop/ShopDetail';
 import Cart from './components/cart/Cart';
-import { CartItem, Shop } from './types';
+import { Shop } from './types';
 import * as api from './services/api';
+import { CartProvider } from './contexts/CartContext';
 
 function App() {
-  // Mock cart data
-  const cartItems: CartItem[] = [];
-  
-  // Shops state
   const [shops, setShops] = useState<Shop[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch shops on component mount
   useEffect(() => {
     loadShops();
   }, []);
@@ -38,7 +34,6 @@ function App() {
     }
   };
 
-  // Shop management handlers
   const handleCreateShop = async (shopData: Partial<Shop>) => {
     try {
       const newShop = await api.createShop(shopData);
@@ -82,37 +77,30 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Router>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<ShopList shops={shops} />} />
-            <Route path="/shops" element={<ShopList shops={shops} />} />
-            <Route path="/shops/:shopId" element={<ShopDetail shops={shops} />} />
-            <Route 
-              path="/admin/shops" 
-              element={
-                <ShopManagement 
-                  shops={shops}
-                  onCreateShop={handleCreateShop}
-                  onUpdateShop={handleUpdateShop}
-                  onDeleteShop={handleDeleteShop}
-                />
-              } 
-            />
-            <Route path="/admin/products" element={<ProductManagement shops={shops} />} />
-            <Route
-              path="/cart"
-              element={
-                <Cart
-                  items={cartItems}
-                  onUpdateQuantity={(id, change) => console.log('Update quantity', id, change)}
-                  onRemoveItem={(id) => console.log('Remove item', id)}
-                />
-              }
-            />
-          </Routes>
-        </Layout>
-      </Router>
+      <CartProvider>
+        <Router>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<ShopList shops={shops} />} />
+              <Route path="/shops" element={<ShopList shops={shops} />} />
+              <Route path="/shops/:shopId" element={<ShopDetail shops={shops} />} />
+              <Route 
+                path="/admin/shops" 
+                element={
+                  <ShopManagement 
+                    shops={shops}
+                    onCreateShop={handleCreateShop}
+                    onUpdateShop={handleUpdateShop}
+                    onDeleteShop={handleDeleteShop}
+                  />
+                } 
+              />
+              <Route path="/admin/products" element={<ProductManagement shops={shops} />} />
+              <Route path="/cart" element={<Cart />} />
+            </Routes>
+          </Layout>
+        </Router>
+      </CartProvider>
     </ThemeProvider>
   );
 }

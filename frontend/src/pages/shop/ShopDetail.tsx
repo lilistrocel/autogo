@@ -10,9 +10,12 @@ import {
   Box,
   Button,
   CircularProgress,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import { Shop, Product } from '../../types';
 import * as api from '../../services/api';
+import { useCart } from '../../contexts/CartContext';
 
 interface ShopDetailProps {
   shops: Shop[];
@@ -23,6 +26,8 @@ const ShopDetail: React.FC<ShopDetailProps> = ({ shops }) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [addedToCart, setAddedToCart] = useState(false);
+  const { addToCart } = useCart();
 
   const shop = shops.find(s => s.id === Number(shopId));
 
@@ -46,6 +51,15 @@ const ShopDetail: React.FC<ShopDetailProps> = ({ shops }) => {
     loadProducts();
   }, [shopId]);
 
+  const handleAddToCart = (product: Product) => {
+    addToCart(product);
+    setAddedToCart(true);
+  };
+
+  const handleCloseSnackbar = () => {
+    setAddedToCart(false);
+  };
+
   if (!shop) {
     return (
       <Container>
@@ -56,33 +70,17 @@ const ShopDetail: React.FC<ShopDetailProps> = ({ shops }) => {
 
   return (
     <Container>
-      <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
-        {shop.logoUrl && (
-          <Box
-            component="img"
-            src={shop.logoUrl}
-            alt={`${shop.name} logo`}
-            sx={{
-              width: 120,
-              height: 120,
-              objectFit: 'contain',
-              borderRadius: '8px',
-              boxShadow: 1
-            }}
-          />
-        )}
-        <Box>
-          <Typography variant="h4" component="h1" gutterBottom color="primary">
-            {shop.name}
-          </Typography>
-          <Typography variant="subtitle1" color="text.secondary" gutterBottom>
-            {shop.description}
-          </Typography>
-        </Box>
+      <Box sx={{ mb: 5 }}>
+        <Typography variant="h4" component="h1" gutterBottom color="primary">
+          {shop.name}
+        </Typography>
+        <Typography variant="subtitle1" color="text.secondary">
+          {shop.description}
+        </Typography>
       </Box>
 
       {loading ? (
-        <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
           <CircularProgress />
         </Box>
       ) : error ? (
@@ -90,24 +88,28 @@ const ShopDetail: React.FC<ShopDetailProps> = ({ shops }) => {
       ) : products.length === 0 ? (
         <Typography>No products available in this shop.</Typography>
       ) : (
-        <Grid container spacing={4}>
+        <Grid container spacing={3} sx={{ px: { xs: 1, sm: 2 } }}>
           {products.map((product) => (
-            <Grid item xs={12} sm={6} md={4} key={product.id}>
+            <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
               <Card
                 sx={{
                   height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
-                  transition: 'transform 0.2s',
+                  transition: 'transform 0.2s, box-shadow 0.2s',
+                  borderRadius: 2,
+                  maxWidth: '360px',
+                  mx: 'auto',
                   '&:hover': {
-                    transform: 'translateY(-4px)',
+                    transform: 'translateY(-8px)',
+                    boxShadow: (theme) => theme.shadows[8],
                   },
                 }}
               >
-                <Box sx={{ position: 'relative', pt: '75%' /* 4:3 aspect ratio */ }}>
+                <Box sx={{ position: 'relative', pt: '70%' }}>
                   <CardMedia
                     component="img"
-                    image={product.imageUrl || '/placeholder-images.webp'}
+                    image={product.imageUrl || '/placeholder-image.webp'}
                     alt={product.name}
                     sx={{
                       position: 'absolute',
@@ -119,25 +121,61 @@ const ShopDetail: React.FC<ShopDetailProps> = ({ shops }) => {
                     }}
                   />
                 </Box>
-                <CardContent sx={{ flexGrow: 1 }}>
-                  <Typography gutterBottom variant="h6" component="h2">
+                <CardContent sx={{ flexGrow: 1, p: 2.5 }}>
+                  <Typography 
+                    gutterBottom 
+                    variant="h6" 
+                    component="h2"
+                    sx={{ 
+                      fontWeight: 600,
+                      mb: 1.5,
+                      fontSize: '1rem',
+                      letterSpacing: '0.02em'
+                    }}
+                  >
                     {product.name}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary" gutterBottom>
+                  <Typography 
+                    variant="body2" 
+                    color="text.secondary"
+                    sx={{ 
+                      mb: 2,
+                      fontSize: '0.9rem',
+                      letterSpacing: '0.02em',
+                      lineHeight: 1.5,
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden'
+                    }}
+                  >
                     {product.description}
                   </Typography>
-                  <Typography variant="h6" color="primary">
-                    AED {product.price.toFixed(2)}
+                  <Typography 
+                    variant="h6" 
+                    color="primary"
+                    sx={{ 
+                      fontWeight: 600,
+                      mb: 2,
+                      fontSize: '1.1rem'
+                    }}
+                  >
+                    ${product.price.toFixed(2)}
                   </Typography>
                 </CardContent>
-                <Box sx={{ p: 2 }}>
+                <Box sx={{ p: 2.5, pt: 0 }}>
                   <Button
                     fullWidth
                     variant="contained"
                     color="primary"
-                    onClick={() => {
-                      // TODO: Add to cart functionality
-                      console.log('Add to cart:', product);
+                    onClick={() => handleAddToCart(product)}
+                    sx={{
+                      borderRadius: 1.5,
+                      py: 1,
+                      textTransform: 'none',
+                      fontSize: '0.9rem',
+                      fontWeight: 500,
+                      letterSpacing: '0.02em'
                     }}
                   >
                     Add to Cart
@@ -148,6 +186,22 @@ const ShopDetail: React.FC<ShopDetailProps> = ({ shops }) => {
           ))}
         </Grid>
       )}
+
+      <Snackbar
+        open={addedToCart}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="success"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          Product added to cart!
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

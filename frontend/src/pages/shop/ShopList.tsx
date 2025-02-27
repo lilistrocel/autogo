@@ -51,9 +51,9 @@ const ShopList: React.FC<ShopListProps> = ({ shops }) => {
         </Typography>
       </Box>
       
-      <Grid container spacing={4}>
+      <Grid container spacing={3} sx={{ px: { xs: 1, sm: 2 } }}>
         {shops.map((shop) => (
-          <Grid item xs={12} sm={6} md={4} key={shop.id}>
+          <Grid item xs={12} sm={6} md={4} lg={3} key={shop.id}>
             <Card
               sx={{
                 height: '100%',
@@ -61,6 +61,8 @@ const ShopList: React.FC<ShopListProps> = ({ shops }) => {
                 flexDirection: 'column',
                 transition: 'transform 0.2s, box-shadow 0.2s',
                 borderRadius: 2,
+                maxWidth: '360px',
+                mx: 'auto',
                 '&:hover': {
                   transform: 'translateY(-8px)',
                   boxShadow: (theme) => theme.shadows[8],
@@ -69,7 +71,7 @@ const ShopList: React.FC<ShopListProps> = ({ shops }) => {
             >
               <CardMedia
                 component="img"
-                height="200"
+                height="160"
                 image={shop.logoUrl}
                 alt={shop.name}
                 sx={{ 
@@ -78,15 +80,15 @@ const ShopList: React.FC<ShopListProps> = ({ shops }) => {
                   borderColor: 'divider'
                 }}
               />
-              <CardContent sx={{ flexGrow: 1, p: 3 }}>
+              <CardContent sx={{ flexGrow: 1, p: 2.5 }}>
                 <Typography 
                   gutterBottom 
                   variant="h6" 
                   component="h2"
                   sx={{ 
                     fontWeight: 600,
-                    mb: 2,
-                    fontSize: '1.1rem',
+                    mb: 1.5,
+                    fontSize: '1rem',
                     letterSpacing: '0.02em'
                   }}
                 >
@@ -96,27 +98,31 @@ const ShopList: React.FC<ShopListProps> = ({ shops }) => {
                   variant="body2" 
                   color="text.secondary"
                   sx={{ 
-                    mb: 3,
+                    mb: 2,
                     fontSize: '0.9rem',
                     letterSpacing: '0.02em',
-                    lineHeight: 1.6
+                    lineHeight: 1.5,
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden'
                   }}
                 >
                   {shop.description}
                 </Typography>
               </CardContent>
-              <Box sx={{ p: 3, pt: 0 }}>
+              <Box sx={{ p: 2.5, pt: 0 }}>
                 <Button
                   fullWidth
                   variant="contained"
                   color="primary"
-                  size="large"
+                  size="medium"
                   onClick={() => navigate(`/shops/${shop.id}`)}
                   sx={{
-                    borderRadius: 2,
-                    py: 1.5,
+                    borderRadius: 1.5,
+                    py: 1,
                     textTransform: 'none',
-                    fontSize: '0.95rem',
+                    fontSize: '0.9rem',
                     fontWeight: 500,
                     letterSpacing: '0.02em'
                   }}
